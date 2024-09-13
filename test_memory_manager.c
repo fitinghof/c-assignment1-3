@@ -245,7 +245,7 @@ void test_resize() {
     test_memory_validity_(blocks, nrOf_blocks);
 
     printf_green("  -Successfull\n");
-    
+
     mem_free_all(blocks, nrOf_blocks);
 
     mem_deinit();
@@ -345,7 +345,7 @@ void test_memory_fragmentation() {
     mem_free(blocks[3]);
 
     // should fit after second block
-    blocks[3] = mem_alloc(sizeof(**blocks) * block_size *2);
+    blocks[3] = mem_alloc(sizeof(**blocks) * block_size * 2);
     // should fit before second block
     blocks[0] = mem_alloc(sizeof(**blocks) * block_size);
 
