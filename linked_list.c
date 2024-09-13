@@ -4,6 +4,7 @@
 
 void list_init(Node** head){
     mem_init(2048);
+    *head = NULL;
 }
 
 void list_insert(Node** head, int data){
@@ -61,10 +62,15 @@ Node* list_search(Node** head, int data){
 }
 
 void list_display(Node** head, Node* start_node, Node* end_node){
-    while(start_node != end_node->next){
-        printf("%d ",start_node->data);
+    if(*head == NULL) return;
+    if(end_node) end_node = end_node->next;
+    printf("[");
+    while(start_node != NULL && start_node != end_node){
+        printf("%d",start_node->data);
         start_node = start_node->next;
+        if(start_node && start_node != end_node) printf(", ");
     }
+    printf("]\n");
 }
 
 int list_count_nodes(Node** head){

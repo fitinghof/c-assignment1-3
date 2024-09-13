@@ -103,7 +103,7 @@ void test_alloc_and_free() {
     for (size_t i = 0; i < block_size * nrOf_blocks; i++) blocks[0][i] = i;
     printf_green("  -Successfull\n");
 
-    mem_free_all((void**)blocks, nrOf_blocks);
+    mem_free_all((void **)blocks, nrOf_blocks);
 
     printf_yellow("  Testing allocation of size 0\n");
     my_assert(mem_alloc(0) == NULL && "mem_alloc(0) did not return NULL");
@@ -215,7 +215,7 @@ void test_allocation_exceeding_memory_size() {
     my_assert(blocks[nrOf_blocks - 1] == NULL &&
               "Succeded with allocation beyond memory capacity, bad");
 
-    mem_free_all((void**)blocks, nrOf_blocks - 1);
+    mem_free_all((void **)blocks, nrOf_blocks - 1);
 
     mem_deinit();
     printf_green("Allocations exceeding pool size test passed.\n");
@@ -234,9 +234,11 @@ void test_double_free() {
     mem_free(block1);  // Free the block for the first time
     mem_free(block1);  // Attempt to free the block a second time
 
-    my_assert(mem_alloc(1024) == NULL && "Double mem_free of the same block freed another block");
+    my_assert(mem_alloc(1024) == NULL &&
+              "Double mem_free of the same block freed another block");
     block1 = mem_alloc(512);
-    my_assert(block1 != NULL && "Failed to alocate memory again after double free");
+    my_assert(block1 != NULL &&
+              "Failed to alocate memory again after double free");
 
     mem_free(block1);
     mem_free(block2);
@@ -263,18 +265,22 @@ void test_memory_fragmentation() {
     for (size_t i = 0; i < nrOf_blocks; i++)
         blocks[i] = mem_alloc(sizeof(**blocks) * block_size);
 
-    mem_free(blocks[2]);  // Free third block, leaving a fragmented hole after block2
-    blocks[2] = mem_alloc(sizeof(**blocks) * block_size);  // Should fit into the space of block3
+    mem_free(
+        blocks[2]);  // Free third block, leaving a fragmented hole after block2
+    blocks[2] = mem_alloc(sizeof(**blocks) *
+                          block_size);  // Should fit into the space of block3
     assert(blocks[2] != NULL);
 
     mem_free(blocks[0]);
     mem_free(blocks[2]);
     mem_free(blocks[3]);
 
-    blocks[3] = mem_alloc(sizeof(**blocks) * block_size * 2); // should fit after second block
-    blocks[0] = mem_alloc(sizeof(**blocks) * block_size); // should fit before second block
+    blocks[3] = mem_alloc(sizeof(**blocks) * block_size *
+                          2);  // should fit after second block
+    blocks[0] = mem_alloc(sizeof(**blocks) *
+                          block_size);  // should fit before second block
 
-    mem_free_all((void**)blocks, nrOf_blocks);
+    mem_free_all((void **)blocks, nrOf_blocks);
 
     mem_deinit();
     printf_green("Memory fragmentation test passed.\n");

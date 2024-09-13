@@ -94,6 +94,19 @@ void test_search()
     list_cleanup(&head);
 }
 
+void test_show_list(){
+    Node* head;
+    list_init(&head);
+
+    for (size_t i = 0; i < 10; i++)
+    {
+        list_insert(&head, i*10);
+    }
+    printf_yellow("Please check manually that this looks good :)\n");
+    list_display(&head, head, NULL);
+    list_cleanup(&head);
+}
+
 int main()
 {
     printf("Needed memory: %ld bytes\n", sizeof(Node[100]));
@@ -102,6 +115,7 @@ int main()
     test_insert_after();
     test_delete();
     test_search();
+    test_show_list();
     printf("Node size: %ld bytes\n", sizeof(Node));
     return 0;
 }
