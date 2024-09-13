@@ -73,6 +73,10 @@ block block_resize(block block_, size_t size) {
     return new_block;
 }
 
+void mem_free_all(block* blocks, size_t nrOf_blocks){
+    for (size_t i = 0; i < nrOf_blocks; i++) mem_free(blocks[i].block);
+}
+
 void test_init() {
     printf_yellow("Testing mem_init...\n");
     static const size_t block_size = 124;
