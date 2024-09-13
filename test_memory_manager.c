@@ -73,8 +73,8 @@ block block_resize(block block_, size_t size) {
     return new_block;
 }
 
-void mem_free_all(block* blocks, size_t nrOf_blocks){
-    for (size_t i = 0; i < nrOf_blocks; i++) mem_free(blocks[i].block);
+void mem_free_all(int** blocks, size_t nrOf_blocks){
+    for (size_t i = 0; i < nrOf_blocks; i++) mem_free(blocks[i]);
 }
 
 void test_init() {
@@ -250,7 +250,7 @@ void test_resize() {
 
     printf_green("  -Successfull\n");
 
-    mem_free_all(blocks, nrOf_blocks);
+    block_free_all(blocks, nrOf_blocks);
 
     mem_deinit();
     printf_green("mem_resize passed.\n");
@@ -288,7 +288,7 @@ void test_allocation_exceeding_memory_size() {
     my_assert(blocks[nrOf_blocks - 1] == NULL &&
               "Succeded with allocation beyond memory capacity, bad");
 
-    for (size_t i = 0; i < nrOf_blocks; i++) mem_free(blocks[i]);
+    mem_free_all(blocks, nrOf_blocks);
 
     mem_deinit();
     printf_green("Allocations exceeding pool size test passed.\n");
@@ -353,10 +353,7 @@ void test_memory_fragmentation() {
     // should fit before second block
     blocks[0] = mem_alloc(sizeof(**blocks) * block_size);
 
-    mem_free(blocks[0]);
-    mem_free(blocks[1]);
-    mem_free(blocks[2]);
-    mem_free(blocks[3]);
+    mem_free_all(blocks, nrOf_blocks);
 
     mem_deinit();
     printf_green("Memory fragmentation test passed.\n");
