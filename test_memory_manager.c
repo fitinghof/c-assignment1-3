@@ -6,7 +6,6 @@
 #include "common_defs.h"
 #include "memory_manager.h"
 
-// For use in future hopefully if motivation
 typedef struct block {
     int *block;
     size_t size;
@@ -73,24 +72,22 @@ block block_resize(block block_, size_t size) {
     return new_block;
 }
 
-void mem_free_all(int** blocks, size_t nrOf_blocks){
+void mem_free_all(int **blocks, size_t nrOf_blocks) {
     for (size_t i = 0; i < nrOf_blocks; i++) mem_free(blocks[i]);
 }
 
 void test_init() {
     printf_yellow("Testing mem_init...\n");
-    static const size_t block_size = 124;
+    static const size_t block_size = 128;
     static const size_t nrOf_blocks = 3;
     // Initialize with block_size * 3) bytes of memory
     // Try allocating to check if init was successful (block_size * 4 bytes)
 
     block blocks[nrOf_blocks];
     mem_init(sizeof(*(blocks[0].block)) * block_size * nrOf_blocks);
-
     for (size_t i = 0; i < nrOf_blocks; i++) block_init(&blocks[i], block_size);
 
     // Test that allocation was successfull
-
     test_memory_validity_(blocks, 3);
 
     block_free_all(blocks, nrOf_blocks);
@@ -120,7 +117,7 @@ void test_alloc_and_free() {
     test_memory_validity_(blocks, nrOf_blocks);
 
     printf_yellow("  Trying allocation one over size limit\n");
-    void *extra_block = mem_alloc(sizeof(*extra_block));
+    void *extra_block = mem_alloc(1);
     my_assert(extra_block == NULL &&
               "  -Allocation over size limit did not fail when it should have");
     printf_green("  -Passed\n");
@@ -237,7 +234,7 @@ void test_resize() {
     block_free(&blocks[removed_block_index]);
 
     block fail_block =
-        block_resize(blocks[resized_block_index], block_size * 3);
+        block_resize(blocks[resized_block_index], block_size * 2 + 1);
     my_assert(fail_block.block == NULL &&
               "Block resize to invalid size succeded when it shouldn't");
 
@@ -246,6 +243,16 @@ void test_resize() {
     my_assert(blocks[resized_block_index].block != NULL &&
               "Block resize to valid size failed");
 
+    printf_yellow("  Testing if resize to new place copies data correctly\n");
+    block_free(&blocks[resized_block_index]);
+
+    for (size_t i = 0; i < blocks[0].size; i++) blocks[0].block[i] = i;
+
+    block resized_block_0 = block_resize(blocks[0], block_size * 2);
+
+    for (size_t i = 0; i < blocks[0].size; i++)
+        my_assert(resized_block_0.block[i] == blocks[0].block[i] &&
+                  "resize does not copy data correctly");
     test_memory_validity_(blocks, nrOf_blocks);
 
     printf_green("  -Successfull\n");
@@ -281,7 +288,6 @@ void test_allocation_exceeding_memory_size() {
               "Allocated one more than total memory pool, not good");
 
     mem_free(blocks[0]);
-
     for (size_t i = 0; i < nrOf_blocks; i++)
         blocks[i] = mem_alloc(sizeof(**blocks) * block_size);
 
