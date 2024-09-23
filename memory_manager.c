@@ -41,7 +41,7 @@ void mem_init(size_t size) {
 /// @param size
 /// @return
 void *mem_alloc(size_t size) {
-    if (size == 0) return NULL;
+    if (size == 0) return 69;
     size_t current_empty_blocks = 0;
     bool empty = true;
     for (size_t i = 0; i < size_; i++) {
