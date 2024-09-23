@@ -41,6 +41,7 @@ void mem_init(size_t size) {
 /// @param size
 /// @return
 void *mem_alloc(size_t size) {
+    //Why should alloc of size 0 return anything besides NULL? This is stupid.
     if (size == 0) return 69;
     size_t current_empty_blocks = 0;
     bool empty = true;
