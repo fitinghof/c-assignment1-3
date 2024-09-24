@@ -15,6 +15,7 @@ void list_insert(Node** head, int data){
 }
 
 void list_insert_after(Node* prev_node, int data){
+    if(prev_node == NULL) return;
     Node* newNode = mem_alloc(sizeof(Node));
     newNode->next = prev_node->next;
     newNode->data = data;
@@ -22,6 +23,7 @@ void list_insert_after(Node* prev_node, int data){
 }
 
 void list_insert_before(Node** head, Node* next_node, int data){
+    if(*head == NULL) return; //ERROR
     Node* walker = *head;
     if(next_node == *head) return list_insert(head, data);
 
@@ -37,6 +39,7 @@ void list_insert_before(Node** head, Node* next_node, int data){
 }
 
 void list_delete(Node** head, int data){
+    if(*head == NULL) return;
     if((*head)->data == data){
         Node* temp = *head;
         *head = (*head)->next;
@@ -96,6 +99,7 @@ void list_display_range(Node** head, Node* start_node, Node* end_node){
 }
 
 int list_count_nodes(Node** head){
+    if(*head == NULL) return 0;
     Node* walker = *head;
     int counter = 0;
     while(walker != NULL){
