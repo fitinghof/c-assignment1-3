@@ -1,8 +1,8 @@
 #include "memory_manager.h"
 
-unsigned char *block_starts_;
-unsigned char *block_ends_;
-void *start_;
+unsigned char *starts_;
+unsigned char *ends_;
+void *memory_;
 size_t size_;
 
 /// @brief sets a bit to 1
@@ -30,9 +30,9 @@ bool get_bit(const unsigned char *array, size_t index) {
 /// @brief loads up the memory with memory
 /// @param size
 void mem_init(size_t size) {
-    start_ = malloc(size);
-    block_starts_ = calloc((size + 7) / 8, 1);
-    block_ends_ = calloc((size + 7) / 8, 1);
+    memory_ = malloc(size);
+    starts_ = calloc((size + 7) / 8, 1);
+    ends_ = calloc((size + 7) / 8, 1);
     size_ = size;
 }
 
@@ -42,19 +42,19 @@ void mem_init(size_t size) {
 /// @return
 void *mem_alloc(size_t size) {
     // Why should alloc of size 0 return anything besides NULL? This is stupid.
-    if (size == 0) return start_;
+    if (size == 0) return memory_;
     size_t current_empty_blocks = 0;
     bool empty = true;
     for (size_t i = 0; i < size_; i++) {
-        if (get_bit(block_starts_, i) == 1) empty = false;
+        if (get_bit(starts_, i) == 1) empty = false;
         current_empty_blocks = (empty) ? current_empty_blocks + 1 : 0;
 
         if (current_empty_blocks == size) {
-            set_bit(block_ends_, i);
-            set_bit(block_starts_, i + 1 - size);
-            return start_ + (i + 1 - size);
+            set_bit(ends_, i);
+            set_bit(starts_, i + 1 - size);
+            return memory_ + (i + 1 - size);
         }
-        if (get_bit(block_ends_, i) == 1) empty = true;
+        if (get_bit(ends_, i) == 1) empty = true;
     }
     return NULL;
 }
@@ -67,26 +67,26 @@ void *mem_alloc_bestfit(size_t size) {
     size_t smallest_size = -1;
     size_t index = 0;
     while (index < size_) {
-        if (get_bit(block_starts_, index) == 1) {
+        if (get_bit(starts_, index) == 1) {
             empty = false;
             if (current_empty_blocks >= size &&
                 current_empty_blocks < smallest_size) {
-                bestfit = start_ + index - current_empty_blocks;
+                bestfit = memory_ + index - current_empty_blocks;
                 smallest_size = current_empty_blocks;
             }
             current_empty_blocks = 0;
         }
         if (empty) current_empty_blocks++;
-        if (get_bit(block_ends_, index) == 1) empty = true;
+        if (get_bit(ends_, index) == 1) empty = true;
         index++;
     }
     if (current_empty_blocks >= size && current_empty_blocks < smallest_size) {
-        bestfit = start_ + index - current_empty_blocks;
+        bestfit = memory_ + index - current_empty_blocks;
         smallest_size = current_empty_blocks;
     }
     if (bestfit) {
-        set_bit(block_starts_, bestfit - start_);
-        set_bit(block_ends_, bestfit - start_ + size - 1);
+        set_bit(starts_, bestfit - memory_);
+        set_bit(ends_, bestfit - memory_ + size - 1);
         return bestfit;
     }
     return NULL;
@@ -95,14 +95,14 @@ void *mem_alloc_bestfit(size_t size) {
 /// @brief Frees the memory block preventing memory leaks
 /// @param block
 void mem_free(void *block) {
-    size_t block_index = block - start_;
-    if (block_index >= size_ || get_bit(block_starts_, block_index) == 0 ||
+    size_t block_index = block - memory_;
+    if (block_index >= size_ || get_bit(starts_, block_index) == 0 ||
         block == NULL)
         return;
 
-    clear_bit(block_starts_, block_index);
-    while (get_bit(block_ends_, block_index) == 0) block_index++;
-    clear_bit(block_ends_, block_index);
+    clear_bit(starts_, block_index);
+    while (get_bit(ends_, block_index) == 0) block_index++;
+    clear_bit(ends_, block_index);
 }
 
 /// @brief changes the size of the block, if possible without moving it, returns
@@ -112,20 +112,20 @@ void mem_free(void *block) {
 /// @return
 void *mem_resize(void *block, size_t size) {
     if (block == NULL) return mem_alloc(size);
-    size_t start_index = block - start_;
-    if (start_index >= size_ || !get_bit(block_starts_, start_index))
+    size_t start_index = block - memory_;
+    if (start_index >= size_ || !get_bit(starts_, start_index))
         return NULL;
 
     size_t end_index = start_index;
-    while (!get_bit(block_ends_, end_index)) end_index++;
+    while (!get_bit(ends_, end_index)) end_index++;
 
     mem_free(block);
     if (size == 0) return NULL;
 
     void *new_block = mem_alloc(size);
     if (!new_block) {
-        set_bit(block_starts_, start_index);
-        set_bit(block_ends_, end_index);
+        set_bit(starts_, start_index);
+        set_bit(ends_, end_index);
         return NULL;
     }
     if (new_block == block) return block;
@@ -138,7 +138,7 @@ void *mem_resize(void *block, size_t size) {
 
 /// @brief gives back the memory used by the memory manager
 void mem_deinit() {
-    free(block_ends_);
-    free(block_starts_);
-    free(start_);
+    free(ends_);
+    free(starts_);
+    free(memory_);
 }
