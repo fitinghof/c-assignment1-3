@@ -79,10 +79,11 @@ void list_delete(Node** head, int data) {
 
 Node* list_search(Node** head, int data) {
     Node* walker = *head;
-    while (walker != NULL && walker->data != data) {
+    while (walker != NULL) {
+        if(walker->data == data) return walker;
         walker = walker->next;
     }
-    return walker;
+    return NULL;
 }
 
 // void list_display(Node** head){
