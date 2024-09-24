@@ -25,7 +25,6 @@ void list_insert(Node** head, int data) {
         walker = walker->next;
     }
     walker->next = newNode;
-
 }
 
 void list_insert_after(Node* prev_node, int data) {
@@ -84,7 +83,7 @@ Node* list_search(Node** head, int data) {
 //         printf("%d", walker->data);
 //         if(walker->next) printf(", ");
 //     }
-//     printf("]");
+//     printf("]\n");
 // }
 
 void list_display(Node** head, Node* start_node, Node* end_node) {
