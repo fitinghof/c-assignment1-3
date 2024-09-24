@@ -75,6 +75,10 @@ Node* list_search(Node** head, int data){
 // }
 
 void list_display(Node** head, Node* start_node, Node* end_node){
+    if(*head == NULL) {
+        printf("[]\n");
+        return;
+    }
     if(end_node) end_node = end_node->next;
     if(!start_node) start_node = *head;
     printf("[");
