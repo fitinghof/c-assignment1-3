@@ -27,6 +27,9 @@ void list_insert(Node** head, int data) {
     walker->next = newNode;
 }
 
+/// @brief Inserts a node after prev_node
+/// @param prev_node
+/// @param data
 void list_insert_after(Node* prev_node, int data) {
     if (prev_node == NULL) return;
     Node* newNode = mem_alloc(sizeof(Node));
