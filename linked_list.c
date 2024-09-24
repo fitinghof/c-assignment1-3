@@ -41,7 +41,13 @@ void list_insert_after(Node* prev_node, int data) {
 void list_insert_before(Node** head, Node* next_node, int data) {
     if (*head == NULL) return;  // ERROR
     Node* walker = *head;
-    if (next_node == *head) return list_insert(head, data);
+    if (next_node == *head){
+        Node* new_node = mem_alloc(sizeof(Node));
+        new_node->data = data;
+        new_node->next = *head;
+        *head = new_node;
+        return;
+    }
 
     while (walker->next != next_node && walker->next != NULL) {
         walker = walker->next;
