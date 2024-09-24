@@ -5,6 +5,9 @@ void list_init(Node** head) {
     *head = NULL;
 }
 
+/// @brief inserts first in linked list
+/// @param head
+/// @param data
 void list_insert(Node** head, int data) {
     Node* newNode = mem_alloc(sizeof(Node));
     newNode->data = data;
