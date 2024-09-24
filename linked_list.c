@@ -112,4 +112,5 @@ void list_cleanup(Node** head){
         walker = walker->next;
         mem_free(temp);
     }
+    *head = NULL;
 }
