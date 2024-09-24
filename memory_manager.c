@@ -41,8 +41,8 @@ void mem_init(size_t size) {
 /// @param size
 /// @return
 void *mem_alloc(size_t size) {
-    //Why should alloc of size 0 return anything besides NULL? This is stupid.
-    if (size == 0) return 69;
+    // Why should alloc of size 0 return anything besides NULL? This is stupid.
+    if (size == 0) return start_;
     size_t current_empty_blocks = 0;
     bool empty = true;
     for (size_t i = 0; i < size_; i++) {
@@ -113,21 +113,22 @@ void mem_free(void *block) {
 void *mem_resize(void *block, size_t size) {
     if (block == NULL) return mem_alloc(size);
     size_t start_index = block - start_;
-    if (start_index >= size_ || !get_bit(block_starts_, start_index)) return NULL;
+    if (start_index >= size_ || !get_bit(block_starts_, start_index))
+        return NULL;
 
     size_t end_index = start_index;
-    while(!get_bit(block_ends_, end_index)) end_index++;
+    while (!get_bit(block_ends_, end_index)) end_index++;
 
     mem_free(block);
     if (size == 0) return NULL;
 
-    void* new_block = mem_alloc(size);
-    if(!new_block) {
+    void *new_block = mem_alloc(size);
+    if (!new_block) {
         set_bit(block_starts_, start_index);
         set_bit(block_ends_, end_index);
         return NULL;
     }
-    if(new_block == block) return block;
+    if (new_block == block) return block;
 
     size_t old_size = end_index - start_index + 1;
     size_t min_size = (size < old_size) ? size : old_size;

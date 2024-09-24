@@ -42,6 +42,7 @@ run_test_mmanager:
 
 # run test cases for the linked list
 run_test_list:
+	export LD_LIBRARY_PATH=.
 	./test_linked_list
 
 # Clean target to clean up build files

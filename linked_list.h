@@ -1,11 +1,12 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
-#include <stdlib.h>
-#include "common_defs.h"
 #include <stdint.h>
+#include <stdlib.h>
+
+#include "common_defs.h"
 #include "memory_manager.h"
 
-typedef struct __attribute__((packed))Node {
+typedef struct __attribute__((packed)) Node {
     struct Node* next;
     uint16_t data;
 } Node;
@@ -22,7 +23,7 @@ void list_delete(Node** head, int data);
 
 Node* list_search(Node** head, int data);
 
-//void list_display(Node** head);
+// void list_display(Node** head);
 
 void list_display(Node** head, Node* start_node, Node* end_node);
 
