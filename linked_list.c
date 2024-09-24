@@ -117,4 +117,5 @@ void list_cleanup(Node** head){
         mem_free(temp);
     }
     *head = NULL;
+    mem_deinit();
 }
