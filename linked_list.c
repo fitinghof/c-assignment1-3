@@ -9,22 +9,22 @@ void list_init(Node** head) {
 /// @param head
 /// @param data
 void list_insert(Node** head, int data) {
-    // Node* newNode = mem_alloc(sizeof(Node));
-    // newNode->data = data;
-    // newNode->next = *head;
-    // *head = newNode;
     Node* newNode = mem_alloc(sizeof(Node));
     newNode->data = data;
-    newNode->next = NULL;
-    if(*head == NULL) {
-        *head = newNode;
-        return;
-    }
-    Node* walker = *head;
-    while(walker->next){
-        walker = walker->next;
-    }
-    walker->next = newNode;
+    newNode->next = *head;
+    *head = newNode;
+    // Node* newNode = mem_alloc(sizeof(Node));
+    // newNode->data = data;
+    // newNode->next = NULL;
+    // if(*head == NULL) {
+    //     *head = newNode;
+    //     return;
+    // }
+    // Node* walker = *head;
+    // while(walker->next){
+    //     walker = walker->next;
+    // }
+    // walker->next = newNode;
 }
 
 /// @brief Inserts a node after prev_node
