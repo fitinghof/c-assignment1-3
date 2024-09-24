@@ -23,9 +23,7 @@ void list_delete(Node** head, int data);
 
 Node* list_search(Node** head, int data);
 
-// void list_display(Node** head);
-
-void list_display(Node** head, Node* start_node, Node* end_node);
+void list_display(Node** head);
 
 void list_display_range(Node** head, Node* start_node, Node* end_node);
 

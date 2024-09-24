@@ -86,31 +86,31 @@ Node* list_search(Node** head, int data) {
     return NULL;
 }
 
-// void list_display(Node** head){
-//     Node* walker = *head;
-//     printf("[");
-//     while(walker != NULL){
-//         printf("%d", walker->data);
-//         if(walker->next) printf(", ");
-//     }
-//     printf("]\n");
-// }
-
-void list_display(Node** head, Node* start_node, Node* end_node) {
-    if (*head == NULL) {
-        printf("[]\n");
-        return;
-    }
-    if (end_node) end_node = end_node->next;
-    if (!start_node) start_node = *head;
+void list_display(Node** head){
+    Node* walker = *head;
     printf("[");
-    while (start_node != NULL && start_node != end_node) {
-        printf("%d", start_node->data);
-        start_node = start_node->next;
-        if (start_node && start_node != end_node) printf(", ");
+    while(walker != NULL){
+        printf("%d", walker->data);
+        if(walker->next) printf(", ");
     }
     printf("]\n");
 }
+
+// void list_display(Node** head, Node* start_node, Node* end_node) {
+//     if (*head == NULL) {
+//         printf("[]\n");
+//         return;
+//     }
+//     if (end_node) end_node = end_node->next;
+//     if (!start_node) start_node = *head;
+//     printf("[");
+//     while (start_node != NULL && start_node != end_node) {
+//         printf("%d", start_node->data);
+//         start_node = start_node->next;
+//         if (start_node && start_node != end_node) printf(", ");
+//     }
+//     printf("]\n");
+// }
 
 void list_display_range(Node** head, Node* start_node, Node* end_node) {
     if (end_node) end_node = end_node->next;
