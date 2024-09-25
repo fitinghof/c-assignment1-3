@@ -1,13 +1,15 @@
 #include "linked_list.h"
 
+/// @brief Initializes the list
+/// @param head list head
 void list_init(Node** head) {
     mem_init(sizeof(Node) * 1001);
     *head = NULL;
 }
 
-/// @brief inserts first in linked list
-/// @param head
-/// @param data
+/// @brief inserts last in linked list
+/// @param head list head
+/// @param data data for the new node
 void list_insert(Node** head, int data) {
     Node* new_node = mem_alloc(sizeof(Node));
     if(!new_node) return;
@@ -25,8 +27,8 @@ void list_insert(Node** head, int data) {
 }
 
 /// @brief Inserts a node after prev_node
-/// @param prev_node
-/// @param data
+/// @param prev_nodenode that will be before new node
+/// @param data data for the new node
 void list_insert_after(Node* prev_node, int data) {
     if (prev_node == NULL) return;
     Node* new_node = mem_alloc(sizeof(Node));
@@ -37,9 +39,9 @@ void list_insert_after(Node* prev_node, int data) {
 }
 
 /// @brief inserts before a node
-/// @param head 
-/// @param next_node 
-/// @param data 
+/// @param head list head
+/// @param next_node node that will be after new node
+/// @param data data for the new node
 void list_insert_before(Node** head, Node* next_node, int data) {
     if (*head == NULL) return;  // ERROR
     Node* walker = *head;
@@ -65,8 +67,8 @@ void list_insert_before(Node** head, Node* next_node, int data) {
 }
 
 /// @brief deletes the Node with data
-/// @param head 
-/// @param data 
+/// @param head list head
+/// @param data
 void list_delete(Node** head, int data) {
     if (*head == NULL) return;
     if ((*head)->data == data) {
@@ -86,9 +88,9 @@ void list_delete(Node** head, int data) {
 }
 
 /// @brief return the pointer to node with data or NULL if not found
-/// @param head 
-/// @param data 
-/// @return 
+/// @param head list head
+/// @param data value to search for
+/// @return Node* or NULL if node not found
 Node* list_search(Node** head, int data) {
     Node* walker = *head;
     while (walker != NULL) {
@@ -99,7 +101,7 @@ Node* list_search(Node** head, int data) {
 }
 
 /// @brief displays all nodes
-/// @param head 
+/// @param head list head
 void list_display(Node** head){
     Node* walker = *head;
     printf("[");
@@ -112,9 +114,9 @@ void list_display(Node** head){
 }
 
 /// @brief Displays the nodes in the range, including start and end
-/// @param head 
-/// @param start_node 
-/// @param end_node 
+/// @param head list head
+/// @param start_node first node to display
+/// @param end_node last node to display
 void list_display_range(Node** head, Node* start_node, Node* end_node) {
     if (end_node) end_node = end_node->next;
     if (!start_node) start_node = *head;
@@ -128,8 +130,8 @@ void list_display_range(Node** head, Node* start_node, Node* end_node) {
 }
 
 /// @brief returns the number of nodes
-/// @param head
-/// @return 
+/// @param head list head
+/// @return int
 int list_count_nodes(Node** head) {
     if (*head == NULL) return 0;
     Node* walker = *head;
@@ -142,7 +144,7 @@ int list_count_nodes(Node** head) {
 }
 
 /// @brief frees all used memory
-/// @param head 
+/// @param head list head
 void list_cleanup(Node** head) {
     Node* walker = *head;
     while (walker != NULL) {
