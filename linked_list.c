@@ -1,7 +1,7 @@
 #include "linked_list.h"
 
 void list_init(Node** head) {
-    mem_init(2048);
+    mem_init(sizeof(Node) * 1001);
     *head = NULL;
 }
 
@@ -13,18 +13,19 @@ void list_insert(Node** head, int data) {
     // newNode->data = data;
     // newNode->next = *head;
     // *head = newNode;
-    Node* newNode = mem_alloc(sizeof(Node));
-    newNode->data = data;
-    newNode->next = NULL;
+    Node* new_node = mem_alloc(sizeof(Node));
+    if(!new_node) return;
+    new_node->data = data;
+    new_node->next = NULL;
     if(*head == NULL) {
-        *head = newNode;
+        *head = new_node;
         return;
     }
     Node* walker = *head;
     while(walker->next){
         walker = walker->next;
     }
-    walker->next = newNode;
+    walker->next = new_node;
 }
 
 /// @brief Inserts a node after prev_node
@@ -32,10 +33,11 @@ void list_insert(Node** head, int data) {
 /// @param data
 void list_insert_after(Node* prev_node, int data) {
     if (prev_node == NULL) return;
-    Node* newNode = mem_alloc(sizeof(Node));
-    newNode->next = prev_node->next;
-    newNode->data = data;
-    prev_node->next = newNode;
+    Node* new_node = mem_alloc(sizeof(Node));
+    if(!new_node) return;
+    new_node->next = prev_node->next;
+    new_node->data = data;
+    prev_node->next = new_node;
 }
 
 /// @brief inserts before a node
@@ -47,6 +49,8 @@ void list_insert_before(Node** head, Node* next_node, int data) {
     Node* walker = *head;
     if (next_node == *head){
         Node* new_node = mem_alloc(sizeof(Node));
+        if(!new_node) return;
+
         new_node->data = data;
         new_node->next = *head;
         *head = new_node;
@@ -57,8 +61,9 @@ void list_insert_before(Node** head, Node* next_node, int data) {
         walker = walker->next;
     }
     if (walker->next == NULL) return;  // ERRROR
-
-    walker->next = mem_alloc(sizeof(Node));
+    Node* new_node = mem_alloc(sizeof(Node));
+    if(!new_node) return;
+    walker->next = new_node;
     walker->next->next = next_node;
     walker->next->data = data;
 }
@@ -96,8 +101,9 @@ void list_display(Node** head){
     while(walker != NULL){
         printf("%d", walker->data);
         if(walker->next) printf(", ");
+        walker = walker->next;
     }
-    printf("]\n");
+    printf("]");
 }
 
 // void list_display(Node** head, Node* start_node, Node* end_node) {
@@ -125,7 +131,7 @@ void list_display_range(Node** head, Node* start_node, Node* end_node) {
         start_node = start_node->next;
         if (start_node && start_node != end_node) printf(", ");
     }
-    printf("]\n");
+    printf("]");
 }
 
 int list_count_nodes(Node** head) {
