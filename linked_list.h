@@ -11,7 +11,7 @@ typedef struct __attribute__((packed)) Node {
     uint16_t data;
 } Node;
 
-void list_init(Node** head);
+void list_init(Node** head, size_t size);
 
 void list_insert(Node** head, int data);
 

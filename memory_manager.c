@@ -28,7 +28,7 @@ bool get_bit(const unsigned char *array, size_t index) {
 }
 
 /// @brief loads up the memory with memory
-/// @param size
+/// @param size size in bytes
 void mem_init(size_t size) {
     memory_ = malloc(size);
     starts_ = calloc((size + 7) / 8, 1);
@@ -38,7 +38,7 @@ void mem_init(size_t size) {
 
 /// @brief returns pointer to memory block, NULL if no chunk of proper size
 /// found
-/// @param size
+/// @param size size in bytes
 /// @return
 void *mem_alloc(size_t size) {
     // Why should alloc of size 0 return anything besides NULL? This is stupid.
@@ -93,7 +93,7 @@ void *mem_alloc_bestfit(size_t size) {
 }
 
 /// @brief Frees the memory block preventing memory leaks
-/// @param block
+/// @param block block to free
 void mem_free(void *block) {
     size_t block_index = block - memory_;
     if (block_index >= size_ || get_bit(starts_, block_index) == 0 ||
@@ -107,9 +107,9 @@ void mem_free(void *block) {
 
 /// @brief changes the size of the block, if possible without moving it, returns
 /// NULL if failed
-/// @param block
-/// @param size
-/// @return
+/// @param block block to resize
+/// @param size size in bytes
+/// @return pointer to resized block, NULL if failed
 void *mem_resize(void *block, size_t size) {
     if (block == NULL) return mem_alloc(size);
     size_t start_index = block - memory_;
@@ -136,7 +136,7 @@ void *mem_resize(void *block, size_t size) {
     return new_block;
 }
 
-/// @brief gives back the memory used by the memory manager
+/// @brief returns the memory used by the memory manager
 void mem_deinit() {
     free(ends_);
     free(starts_);

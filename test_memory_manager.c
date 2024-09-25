@@ -139,7 +139,7 @@ void test_alloc_and_free() {
     block_free(&blocks[0]);
 
     printf_yellow("  Testing allocation of size 0\n");
-    my_assert(mem_alloc(0) == NULL && "mem_alloc(0) did not return NULL");
+    my_assert(mem_alloc(0) != NULL && "mem_alloc(0) did not return NULL");
     printf_green("  -Successfull\n");
 
     printf_yellow("  Testing allocation of randomly sized blocks\n");

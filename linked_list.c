@@ -2,8 +2,8 @@
 
 /// @brief Initializes the list
 /// @param head list head
-void list_init(Node** head) {
-    mem_init(sizeof(Node) * 1001);
+void list_init(Node** head, size_t size) {
+    mem_init(size);
     *head = NULL;
 }
 
