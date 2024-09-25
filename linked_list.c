@@ -9,10 +9,6 @@ void list_init(Node** head) {
 /// @param head
 /// @param data
 void list_insert(Node** head, int data) {
-    // Node* newNode = mem_alloc(sizeof(Node));
-    // newNode->data = data;
-    // newNode->next = *head;
-    // *head = newNode;
     Node* new_node = mem_alloc(sizeof(Node));
     if(!new_node) return;
     new_node->data = data;
@@ -68,6 +64,9 @@ void list_insert_before(Node** head, Node* next_node, int data) {
     walker->next->data = data;
 }
 
+/// @brief deletes the Node with data
+/// @param head 
+/// @param data 
 void list_delete(Node** head, int data) {
     if (*head == NULL) return;
     if ((*head)->data == data) {
@@ -86,6 +85,10 @@ void list_delete(Node** head, int data) {
     mem_free(temp);
 }
 
+/// @brief return the pointer to node with data or NULL if not found
+/// @param head 
+/// @param data 
+/// @return 
 Node* list_search(Node** head, int data) {
     Node* walker = *head;
     while (walker != NULL) {
@@ -95,6 +98,8 @@ Node* list_search(Node** head, int data) {
     return NULL;
 }
 
+/// @brief displays all nodes
+/// @param head 
 void list_display(Node** head){
     Node* walker = *head;
     printf("[");
@@ -106,22 +111,10 @@ void list_display(Node** head){
     printf("]");
 }
 
-// void list_display(Node** head, Node* start_node, Node* end_node) {
-//     if (*head == NULL) {
-//         printf("[]\n");
-//         return;
-//     }
-//     if (end_node) end_node = end_node->next;
-//     if (!start_node) start_node = *head;
-//     printf("[");
-//     while (start_node != NULL && start_node != end_node) {
-//         printf("%d", start_node->data);
-//         start_node = start_node->next;
-//         if (start_node && start_node != end_node) printf(", ");
-//     }
-//     printf("]\n");
-// }
-
+/// @brief Displays the nodes in the range, including start and end
+/// @param head 
+/// @param start_node 
+/// @param end_node 
 void list_display_range(Node** head, Node* start_node, Node* end_node) {
     if (end_node) end_node = end_node->next;
     if (!start_node) start_node = *head;
@@ -134,6 +127,9 @@ void list_display_range(Node** head, Node* start_node, Node* end_node) {
     printf("]");
 }
 
+/// @brief returns the number of nodes
+/// @param head
+/// @return 
 int list_count_nodes(Node** head) {
     if (*head == NULL) return 0;
     Node* walker = *head;
@@ -145,6 +141,8 @@ int list_count_nodes(Node** head) {
     return counter;
 }
 
+/// @brief frees all used memory
+/// @param head 
 void list_cleanup(Node** head) {
     Node* walker = *head;
     while (walker != NULL) {
