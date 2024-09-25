@@ -38,6 +38,10 @@ void list_insert_after(Node* prev_node, int data) {
     prev_node->next = newNode;
 }
 
+/// @brief inserts before a node
+/// @param head 
+/// @param next_node 
+/// @param data 
 void list_insert_before(Node** head, Node* next_node, int data) {
     if (*head == NULL) return;  // ERROR
     Node* walker = *head;
