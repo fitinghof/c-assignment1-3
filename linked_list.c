@@ -17,7 +17,7 @@ void list_insert(Node** head, int data) {
     new_node->next = NULL;
     if(*head == NULL) {
         *head = new_node;
-        return; j<HSEFGIUHAseiury gfhuy
+        return;
     }
     Node* walker = *head;
     while(walker->next){
