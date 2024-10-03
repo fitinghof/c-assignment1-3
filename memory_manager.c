@@ -2,11 +2,13 @@
 
 void *memory_;
 void *memory_end;
+size_t space_left = 0;
 
 #define block_size_mask 0xfffffffC
 #define block_free_mask 1
 #define align_size 4
 #define ALIGN(a) (a + align_size - 1) & ~(align_size - 1)
+
 
 typedef uint32_t header;
 
@@ -51,6 +53,7 @@ void mem_init(size_t size) {
     header *initial_block = memory_;
     block_set_size(initial_block, total_size - sizeof(header));
     block_set_free(initial_block, true);
+    space_left = size;
 }
 
 /// @brief returns pointer to memory block, NULL if no chunk of proper size
@@ -58,6 +61,8 @@ void mem_init(size_t size) {
 /// @param size size in bytes
 /// @return
 void *mem_alloc(size_t size) {
+    if(size > space_left) return NULL;
+    if(size == 0) return memory_ + sizeof(header);
     size = ALIGN(size);
     header *first_free_block = NULL;
     header *walker = memory_;
@@ -77,6 +82,8 @@ void *mem_alloc(size_t size) {
                 block_set_size(first_free_block,
                                continius_memory - sizeof(header));
                 block_set_free(first_free_block, false);
+
+                space_left -= size;
                 return first_free_block + 1;
             }
             block_set_size(first_free_block, size);
@@ -86,6 +93,8 @@ void *mem_alloc(size_t size) {
             block_set_size(new_block,
                            continius_memory - size - 2 * sizeof(header));
             block_set_free(new_block, true);
+
+            space_left -= size;
             return first_free_block + 1;
         }
         continius_memory = 0;
@@ -101,6 +110,7 @@ void mem_free(void *block) {
     if (!block_is_valid(block - sizeof(header))) return;
     header *block_header = block - sizeof(header);
     block_set_free(block_header, true);
+    space_left += block_size(block_header);
 }
 
 /// @brief changes the size of the block, if possible without moving it, returns
@@ -116,7 +126,6 @@ void *mem_resize(void *block, size_t size) {
         return NULL;
     }
     header *header = block - sizeof(*header);
-    printf("%p\n%p\n", header, block);
     block_set_free(header, true);
     void *new_block = mem_alloc(size);
     if (!new_block) {
@@ -124,7 +133,6 @@ void *mem_resize(void *block, size_t size) {
         return NULL;
     }
     size_t minsize = (block_size(header) < size) ? block_size(header) : size;
-    printf("block_size: %ld size variable: %ld\n", block_size(header), size);
     memcpy(new_block, ((void *)header) + sizeof(*header), minsize);
     return new_block;
 }

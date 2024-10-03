@@ -6,7 +6,7 @@
 #include "common_defs.h"
 #include "memory_manager.h"
 
-typedef struct __attribute__((packed)) Node {
+typedef struct Node {
     struct Node* next;
     uint16_t data;
 } Node;

@@ -3,7 +3,7 @@
 /// @brief Initializes the list
 /// @param head list head
 void list_init(Node** head, size_t size) {
-    mem_init(size);
+    mem_init(size + (4 * size)/sizeof(Node) );
     *head = NULL;
 }
 
@@ -20,7 +20,9 @@ void list_insert(Node** head, uint16_t data) {
         return;
     }
     Node* walker = *head;
-    while (walker->next) walker = walker->next;
+    while (walker->next) {
+        walker = walker->next;
+    }
     walker->next = new_node;
 }
 
@@ -43,18 +45,22 @@ void list_insert_after(Node* prev_node, uint16_t data) {
 void list_insert_before(Node** head, Node* next_node, uint16_t data) {
     if (*head == NULL) return;  // ERROR
     Node* walker = *head;
-    Node* new_node = mem_alloc(sizeof(Node));
-    if (!new_node) return;
     if (next_node == *head) {
+        Node* new_node = mem_alloc(sizeof(Node));
+        if (!new_node) return;
+
         new_node->data = data;
         new_node->next = *head;
         *head = new_node;
         return;
     }
+
     while (walker->next != next_node && walker->next != NULL) {
         walker = walker->next;
     }
     if (walker->next == NULL) return;  // ERRROR
+    Node* new_node = mem_alloc(sizeof(Node));
+    if (!new_node) return;
     walker->next = new_node;
     walker->next->next = next_node;
     walker->next->data = data;
